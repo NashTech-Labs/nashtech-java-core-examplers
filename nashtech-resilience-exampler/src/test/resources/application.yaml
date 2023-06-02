@@ -1,0 +1,67 @@
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    enabled-by-default: true
+
+resilience4j:
+  retry:
+    retry-aspect-order: 2
+    instances:
+      retry:
+        maxAttempts: 3
+        waitDuration: 10s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+
+resilience4j.circuitbreaker:
+  circuit-breaker-aspect-order: 1
+  instances:
+    circuit_breaker:
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 10
+      slidingWindowSize: 5
+      permittedNumberOfCallsInHalfOpenState: 2
+      slidingWindowType: COUNT_BASED
+      minimumNumberOfCalls: 5
+
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 60
+      automatic-transition-from-open-to-half-open-enabled: true
+
+resilience4j.ratelimiter:
+  rate-limiter-aspect-order: 3
+  instances:
+    ratelimiter:
+      limitForPeriod: 2
+
+      limitRefreshPeriod: 4s
+      timeoutDuration: 0
+
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 100
+resilience4j.bulkhead:
+  instances:
+    bulkhead:
+      maxWaitDuration: 5000
+      maxConcurrentCalls: 5
+
+resilience4j.timelimiter:
+  time-limiter-aspect-order: 4
+  instances:
+    timelimiter:
+      timeoutDuration: 3s
+      cancelRunningFuture: true
+
+
+
+
+
+
+
+
+

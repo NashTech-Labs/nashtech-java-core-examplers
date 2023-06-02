@@ -1,0 +1,115 @@
+
+services:
+    tempo:
+        image: grafana/tempo
+        extra_hosts: ['host.docker.internal:host-gateway']
+        command: [ "-config.file=/etc/tempo.yaml" ]
+        volumes:
+            - ./docker/tempo/tempo-local.yaml:/etc/tempo.yaml:ro
+            - ./tempo-data:/tmp/tempo
+        ports:
+            - "14268"  # jaeger ingest
+            - "9411:9411" # zipkin
+
+    loki:
+        image: grafana/loki
+        extra_hosts: ['host.docker.internal:host-gateway']
+        command: [ "-config.file=/etc/loki/local-config.yaml" ]
+        ports:
+            - "3100:3100"                                   # loki needs to be exposed so it receives logs
+        environment:
+            - JAEGER_AGENT_HOST=tempo
+            - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
+            - JAEGER_SAMPLER_TYPE=const
+            - JAEGER_SAMPLER_PARAM=1
+
+    prometheus:
+        image: prom/prometheus
+        extra_hosts: ['host.docker.internal:host-gateway']
+        command:
+            - --enable-feature=exemplar-storage
+            - --config.file=/etc/prometheus/prometheus.yml
+        volumes:
+            - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        ports:
+            - "9090:9090"
+
+    grafana:
+        image: grafana/grafana
+        extra_hosts: ['host.docker.internal:host-gateway']
+        volumes:
+            - ./docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+            - ./docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+        environment:
+            - GF_AUTH_ANONYMOUS_ENABLED=true
+            - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+            - GF_AUTH_DISABLE_LOGIN_FORM=true
+        ports:
+            - "3000:3000"
+
+    sonarqube:
+        image: sonarqube
+        restart: unless-stopped
+        environment:
+            - SONARQUBE_JDBC_USERNAME=sonarqube
+            - SONARQUBE_JDBC_PASSWORD=sonarpass
+            - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+        ports:
+            - "9000:9000"
+            - "9092:9092"
+        volumes:
+            - sonarqube_conf:/opt/sonarqube/conf
+            - sonarqube_data:/opt/sonarqube/data
+            - sonarqube_extensions:/opt/sonarqube/extensions
+            - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+    sonar_db:
+        image: postgres
+        restart: unless-stopped
+        environment:
+            - POSTGRES_USER=sonarqube
+            - POSTGRES_PASSWORD=sonarpass
+            - POSTGRES_DB=sonarqube
+        volumes:
+            - sonarqube_db:/var/lib/postgresql
+            - postgresql_data:/var/lib/postgresql/data
+
+    mongodb:
+        image: mongo:latest
+        container_name: mongo
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=nashtech
+            - MONGO_INITDB_ROOT_PASSWORD=nashtech
+        ports:
+            - "27017:27017"
+
+    mysql_db:
+        image: mysql:latest
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: my_database
+        ports:
+            - "3307:3307"
+
+    postgresql_db:
+        image: "postgres:15-alpine3.17"
+        restart: always
+        ports:
+            - "5433:5432"
+        environment:
+            POSTGRES_DB: java_to_dev_app_db
+            POSTGRES_USER: java_to_dev
+            POSTGRES_PASSWORD: nE5kMc7JCGNqwDQM
+
+volumes:
+    postgresql_data:
+    sonarqube_bundled-plugins:
+    sonarqube_conf:
+    sonarqube_data:
+    sonarqube_db:
+    sonarqube_extensions:
+
+
+
+# Prometheus: http://localhost:9090/
+# Grafana: http://localhost:3000/

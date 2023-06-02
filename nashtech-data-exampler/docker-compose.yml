@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: my_database
+    ports:
+      - "3306:3306"
+
+  postgresql_db:
+    image: "postgres:15-alpine3.17"
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: java_to_dev_app_db
+      POSTGRES_USER: java_to_dev
+      POSTGRES_PASSWORD: nE5kMc7JCGNqwDQM
