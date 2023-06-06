@@ -28,15 +28,11 @@ jobs:
         cache: maven
 
     - name: Build and Publish Maven
+      run: mvn clean install
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ github.run_number }}
-      run: |
-        # Generate a unique version based on the commit SHA
-        # mvn versions:set -DnewVersion=1.0.${VERSION}-SNAPSHOT -DgenerateBackupPoms=false
-        # Build and deploy the artifact
 
-        mvn clean install
         
 
     - name: Upload JAR artifact
