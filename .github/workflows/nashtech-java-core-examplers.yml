@@ -31,14 +31,12 @@ jobs:
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ github.run_number }}
-          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       run: |
         # Generate a unique version based on the commit SHA
         # mvn versions:set -DnewVersion=1.0.${VERSION}-SNAPSHOT -DgenerateBackupPoms=false
         # Build and deploy the artifact
 
-        mvn clean deploy -P sonar --file pom.xml
+        mvn clean install
         
 
     - name: Upload JAR artifact
