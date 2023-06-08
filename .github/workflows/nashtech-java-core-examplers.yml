@@ -9,10 +9,9 @@
 name: nashtech-java-core-examplers
 
 on:
-  workflow_run:
-    workflows: ["nashtech-java-core"]
-    types: [completed]
-
+  repository_dispatch:
+    types:
+      - trigger-from-nashtech-java-core
   
 jobs:
   build:
