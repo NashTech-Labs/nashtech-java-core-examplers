@@ -29,13 +29,13 @@
         </repository>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core</url>
+            <url>https://maven.pkg.github.com/vimal-knoldus/nashtech-java-core</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </repository>
     </repositories>
-    <distributionManagement>
+    <!--<distributionManagement>
         <repository>
             <id>github</id>
             <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core-examplers</url>
@@ -43,7 +43,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
     <properties>
         <rootDir>${project.basedir}</rootDir>
         <spotbugRootDir>${rootDir}/nashtech-common-exampler</spotbugRootDir>
