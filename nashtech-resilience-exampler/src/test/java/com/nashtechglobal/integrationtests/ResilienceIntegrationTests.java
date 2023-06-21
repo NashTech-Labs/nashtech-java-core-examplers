@@ -2,6 +2,7 @@ package com.nashtechglobal.integrationtests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nashtechglobal.ResilienceExamplerApplication;
+import com.nashtechglobal.model.ExampleBody;
 import com.nashtechglobal.model.ExamplerApiRequest;
 import com.nashtechglobal.model.ExamplerApiResponse;
 import com.nashtechglobal.service.ResilienceExampleService;
@@ -48,6 +49,7 @@ class ResilienceIntegrationTests {
     private static final String CONTENT_TYPE = "application/json";
     private static final String BASE_URL = "/resilience";
     protected static String CIRCUIT_BREAKER_NAME = "circuit_breaker";
+    private ExampleBody exampleBody=new ExampleBody();
     @Autowired
     private CircuitBreakerRegistry registry;
     @Autowired
@@ -94,7 +96,7 @@ class ResilienceIntegrationTests {
     void testShouldCallExternalService_Once() {
 
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "GET", exampleBody, null);
         ExamplerApiResponse examplerApiResponse = new ExamplerApiResponse();
 
         doReturn(ResponseEntity.ok().body(examplerApiResponse))
@@ -120,7 +122,7 @@ class ResilienceIntegrationTests {
     void testShouldCallExternalServiceAsPer_MaxRetryAttempts() {
 
         ExamplerApiRequest apiRequest
-                = new ExamplerApiRequest("https://www.goog22le.com/", "GET", null, null);
+                = new ExamplerApiRequest("https://www.goog22le.com/", "GET", exampleBody, null);
 
         doThrow(ResourceAccessException.class)
                 .when(webClientService)
@@ -144,7 +146,7 @@ class ResilienceIntegrationTests {
     void testShouldCallExternalService_Once_Success() {
 
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "GET", exampleBody, null);
         ExamplerApiResponse examplerApiResponse = new ExamplerApiResponse();
 
         doReturn(ResponseEntity.ok().body(examplerApiResponse))
@@ -168,7 +170,7 @@ class ResilienceIntegrationTests {
     void testShouldCallExternalServiceOnSuccess() {
 
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "GET", exampleBody, null);
         ExamplerApiResponse examplerApiResponse = new ExamplerApiResponse();
 
         doReturn(ResponseEntity.ok().body(examplerApiResponse))
@@ -205,7 +207,7 @@ class ResilienceIntegrationTests {
 
         int currentRepetition = repetitionInfo.getCurrentRepetition();
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.goog22le.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.goog22le.com/", "GET", exampleBody, null);
 
         doThrow(CallNotPermittedException.class)
                 .when(webClientService)
@@ -248,7 +250,7 @@ class ResilienceIntegrationTests {
     @Test
     void testShouldCallExternalService_Once_Ratelimiter() {
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "POST", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "POST", exampleBody, null);
         ExamplerApiResponse examplerApiResponse = new ExamplerApiResponse();
 
         doReturn(ResponseEntity.ok().body(examplerApiResponse))
@@ -274,7 +276,7 @@ class ResilienceIntegrationTests {
 
         int currentRepetition = repetitionInfo.getCurrentRepetition();
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "GET", exampleBody, null);
 
         doThrow(ResourceAccessException.class)
                 .when(webClientService)
@@ -306,7 +308,7 @@ class ResilienceIntegrationTests {
     void bulkhead_Success_Test() {
 
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "GET", exampleBody, null);
         ExamplerApiResponse examplerApiResponse = new ExamplerApiResponse();
 
         doReturn(ResponseEntity.ok().body(examplerApiResponse))
@@ -332,7 +334,7 @@ class ResilienceIntegrationTests {
     void bulkhead_Fallback_Test() {
 
         ExamplerApiRequest apiRequest =
-                new ExamplerApiRequest("https://www.google.com/", "GET", null, null);
+                new ExamplerApiRequest("https://www.google.com/", "GET", exampleBody, null);
         ExamplerApiResponse examplerApiResponse = new ExamplerApiResponse();
 
         doThrow(ResourceAccessException.class)

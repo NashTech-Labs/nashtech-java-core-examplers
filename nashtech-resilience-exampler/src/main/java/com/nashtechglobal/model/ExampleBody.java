@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class ExampleBody extends ExamplerApiRequest {
+public class ExampleBody {
 
     /**
 
