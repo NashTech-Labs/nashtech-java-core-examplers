@@ -2,6 +2,7 @@ package com.nashtechglobal.service;
 
 import com.nashtechglobal.model.ReactiveExampleApiRequest;
 import com.nashtechglobal.model.ReactiveExampleApiResponse;
+import com.nashtechglobal.model.ReactiveExampleBody;
 import com.nashtechglobal.reactive.service.ReactiveRequestCallback;
 import com.nashtechglobal.reactive.service.ReactiveService;
 import com.nashtechglobal.web.model.ExternalApiRequest;
@@ -141,9 +142,16 @@ public class ReactiveExampleService {
 
     public ExternalApiRequest<ReactiveExampleApiRequest> createRequest(
             final ReactiveExampleApiRequest examplerRequest) {
+        ReactiveExampleBody reactiveExampleBody = new ReactiveExampleBody();
         if (examplerRequest != null) {
+            reactiveExampleBody.setId(reactiveExampleBody.getId());
+            reactiveExampleBody.setTestingDateData(reactiveExampleBody.getTestingDateData());
+            reactiveExampleBody.setTestingLongData(reactiveExampleBody.getTestingLongData());
+            reactiveExampleBody.setTestingStringData(reactiveExampleBody.getTestingStringData());
+
+            examplerRequest.setBody(reactiveExampleBody);
             return ExternalApiRequest.<ReactiveExampleApiRequest>builder()
-                    .body(examplerRequest.getBody())
+                    .body(examplerRequest)
                     .httpMethod(HttpMethod.valueOf(
                             examplerRequest.getHttpMethod()))
                     .url(examplerRequest.getUrl())
