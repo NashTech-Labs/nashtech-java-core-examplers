@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class ReactiveExampleBody extends ReactiveExampleApiRequest {
+public class ReactiveExampleBody {
 
     /**
      * The identifier of the response.
