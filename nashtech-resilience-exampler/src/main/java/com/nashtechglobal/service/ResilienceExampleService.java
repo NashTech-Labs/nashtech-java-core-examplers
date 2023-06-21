@@ -1,5 +1,6 @@
 package com.nashtechglobal.service;
 
+import com.nashtechglobal.model.ExampleBody;
 import com.nashtechglobal.model.ExamplerApiRequest;
 import com.nashtechglobal.model.ExamplerApiResponse;
 import com.nashtechglobal.resilience.service.ResilienceService;
@@ -154,9 +155,16 @@ public class ResilienceExampleService {
      */
     public ExternalApiRequest<ExamplerApiRequest> createRequest(
             final ExamplerApiRequest examplerRequest) {
+        ExamplerApiRequest apiRequest = new ExamplerApiRequest();
+        ExampleBody exampleBody = new ExampleBody();
+
         if (examplerRequest != null) {
+            exampleBody.setId(examplerRequest.getBody().getId());
+            exampleBody.setName(examplerRequest.getBody().getName());
+            apiRequest.setBody(exampleBody);
+
             return ExternalApiRequest.<ExamplerApiRequest>builder().
-                    body(examplerRequest.getBody())
+                    body(apiRequest)
                     .httpMethod(HttpMethod
                             .valueOf(examplerRequest.getHttpMethod()))
                     .url(examplerRequest.getUrl())
