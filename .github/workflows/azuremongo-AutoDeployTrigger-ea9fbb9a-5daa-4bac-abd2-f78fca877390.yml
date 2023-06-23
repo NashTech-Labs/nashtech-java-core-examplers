@@ -25,6 +25,12 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZUREMONGO_AZURE_CREDENTIALS }}
+          
+      - name: Build and push container image to registry
+        run: |
+          docker build -t azuresampleproject.azurecr.io/azuremongo:latest .
+          docker login azuresampleproject.azurecr.io -u ${{ secrets.AZUREMONGO_REGISTRY_USERNAME }} -p ${{ secrets.AZUREMONGO_REGISTRY_PASSWORD }}
+          docker push azuresampleproject.azurecr.io/azuremongo:latest
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v1
@@ -36,7 +42,7 @@ jobs:
           containerAppName: azuremongo
           resourceGroup: DefaultResourceGroup-EUS
           imageToBuild: azuresampleproject.azurecr.io/azuremongo:latest
-          runtimeArgs: '--runtime-platform docker'
+      
           
 
      
