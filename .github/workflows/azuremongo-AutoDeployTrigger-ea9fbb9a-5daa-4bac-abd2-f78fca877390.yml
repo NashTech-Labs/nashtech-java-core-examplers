@@ -35,7 +35,7 @@ jobs:
           registryPassword: ${{ secrets.AZUREMONGO_REGISTRY_PASSWORD }}
           containerAppName: azuremongo
           resourceGroup: DefaultResourceGroup-EUS
-          imageToBuild: azuresampleproject.azurecr.io/azuremongo:${{ github.sha }}
+          imageToBuild: azuresampleproject.azurecr.io/azuremongo:latest
           
 
      
