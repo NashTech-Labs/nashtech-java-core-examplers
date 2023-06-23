@@ -36,6 +36,7 @@ jobs:
           containerAppName: azuremongo
           resourceGroup: DefaultResourceGroup-EUS
           imageToBuild: azuresampleproject.azurecr.io/azuremongo:latest
+          runtimeArgs: '--runtime-platform docker'
           
 
      
