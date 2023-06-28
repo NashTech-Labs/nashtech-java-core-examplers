@@ -2,11 +2,11 @@
 # Build stage
 #
 
-FROM maven:3.6.3-jdk-ea-1-slim AS build
+FROM maven:3.6.3-jdk-11-slim AS build
 
-WORKDIR usr/src/app
+WORKDIR /usr/src/app
 
-COPY . ./
+COPY . .
 
 RUN mvn clean package
 
