@@ -1,25 +1,4 @@
-#
-# Build stage
-#
-
-FROM maven:3.6.3-jdk-11-slim AS build
-
-WORKDIR /usr/src/app
-
-COPY . .
-
-RUN mvn clean package
-
-#
-# Package stage
-#
-
-FROM openjdk:20-ea-1-slim
-
-ARG JAR_NAME="spring-boot-resilience"
-
-WORKDIR /usr/src/app
-
-COPY --from=build /usr/src/app/target/${JAR_NAME}.jar ./app.jar
-
-CMD ["java","-jar", "./app.jar"]
+FROM openjdk:19-jdk
+VOLUME /tmp
+COPY nashtech-resilience-exampler/target/nashtech-resilience-exampler-1.0-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
