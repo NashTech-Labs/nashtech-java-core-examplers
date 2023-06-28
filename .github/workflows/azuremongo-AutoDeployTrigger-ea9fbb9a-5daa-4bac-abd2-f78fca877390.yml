@@ -1,23 +1,70 @@
-name: Build a Docker image and Push it to ACR
+# This workflow will build a docker container, publish it to Azure Container Registry, and deploy it to Azure Kubernetes Service.
+#
+# To configure this workflow:
+#
+# 1. Set up the following secrets in your workspace: 
+#     a. REGISTRY_USERNAME with ACR username
+#     b. REGISTRY_PASSWORD with ACR Password
+#     c. AZURE_CREDENTIALS with the output of `az ad sp create-for-rbac --sdk-auth`
+#
+# 2. Change the values for the REGISTRY_NAME, CLUSTER_NAME, CLUSTER_RESOURCE_GROUP and NAMESPACE environment variables (below).
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
-  workflow_dispatch:
+# Environment variables available to all jobs and steps in this workflow
+env:
+  REGISTRY_NAME: my-registry-name
+  CLUSTER_NAME: my-cluster-name
+  CLUSTER_RESOURCE_GROUP: my-cluster-resource-group
+  NAMESPACE: default
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
+
+      # Connect to Azure Container registry (ACR)
       - uses: azure/docker-login@v1
         with:
           login-server: azuresampleproject.azurecr.io
           username: azuresampleproject
           password: K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA
+
+      # Container build and push to a Azure Container registry (ACR)
       - run: |
-          docker build . -t azuresampleproject.azurecr.io/azuresampleresilience:${{ github.sha }}
-          docker push azuresampleproject.azurecr.io/azuresampleresilience:${{ github.sha }}
+          docker build . -t azuresampleproject.azurecr.io/nashtech-reactiv:latest
+          docker push azuresampleproject.azurecr.io/nashtech-reactiv:latest
+
+      # Set the target Azure Kubernetes Service (AKS) cluster.
+      - uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: demo
+          resource-group: azure-demo
+
+      # Create namespace if doesn't exist
+      - run: |
+          kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
+
+      # Create imagepullsecret for Azure Container registry (ACR)
+      - uses: azure/k8s-create-secret@v1
+        with:
+          container-registry-url: azuresampleproject.azurecr.io
+          container-registry-username: azuresampleproject
+          container-registry-password: K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA
+          secret-name: azuresampleproject-registry-connection
+          namespace: ${{ env.NAMESPACE }}
+
+      # Deploy app to AKS
+      - uses: azure/k8s-deploy@v1
+        with:
+          manifests: |
+            manifests/deployment.yml
+            manifests/service.yml
+          images: |
+            azuresampleproject.azurecr.io/nashtech-reactiv:latest
+          imagepullsecrets: |
+            azuresampleproject-registry-connection
+          namespace: ${{ env.NAMESPACE }}
