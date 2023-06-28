@@ -13,14 +13,14 @@
     <name>nashtech-java-core-examplers</name>
     <description>Java Studio SDK</description>
     <modules>
-        <module>nashtech-common-exampler</module>
-        <module>nashtech-data-exampler</module>
-        <module>nashtech-data-mongo-exampler</module>
-        <module>nashtech-data-reactive-mongo-exampler</module>
-        <module>nashtech-observability-exampler</module>
-        <module>nashtech-reactive-exampler</module>
+<!--        <module>nashtech-common-exampler</module>-->
+<!--        <module>nashtech-data-exampler</module>-->
+<!--        <module>nashtech-data-mongo-exampler</module>-->
+<!--        <module>nashtech-data-reactive-mongo-exampler</module>-->
+<!--        <module>nashtech-observability-exampler</module>-->
+<!--        <module>nashtech-reactive-exampler</module>-->
         <module>nashtech-resilience-exampler</module>
-        <module>nashtech-web-exampler</module>
+<!--        <module>nashtech-web-exampler</module>-->
     </modules>
     <repositories>
         <repository>
@@ -76,6 +76,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>spring-boot-resilience</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -132,31 +133,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>          
-            <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <from>
-                        <image>openjdk:19</image>
-                    </from>
-                    <to>
-                        <image>docker.io/likithntg/nashtech-internal:latest</image>
-                    <auth>
-                        <username>${env.REGISTRY_USERNAME}</username>
-                        <password>${env.REGISTRY_PASSWORD}</password>
-                    </auth>
-                    </to>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>dockerBuild</goal>
-                        </goals>
-                    </execution>
-                </executions> 
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

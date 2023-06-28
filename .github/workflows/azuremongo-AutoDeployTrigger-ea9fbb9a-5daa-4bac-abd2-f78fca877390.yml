@@ -1,49 +1,23 @@
-name: Trigger auto deployment for azuremongo
+name: Build a Docker image and Push it to ACR
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ main ]
-    paths:
-    - '**'
-    - '.github/workflows/azuremongo-AutoDeployTrigger-ea9fbb9a-5daa-4bac-abd2-f78fca877390.yml'
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-  # Allow mannually trigger 
   workflow_dispatch:
-      
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout to the branch
-        uses: actions/checkout@v2
-
-      - name: Azure Login
-        uses: azure/login@v1
+      - uses: actions/checkout@v2
+      - uses: azure/docker-login@v1
         with:
-          creds: ${{ secrets.AZUREMONGO_AZURE_CREDENTIALS }}
-          
-      - name: Build and push container image to registry
-        run: |
-          docker build -t azuresampleproject.azurecr.io/azuremongo:latest .
-          docker login azuresampleproject.azurecr.io -u ${{ secrets.AZUREMONGO_REGISTRY_USERNAME }} -p ${{ secrets.AZUREMONGO_REGISTRY_PASSWORD }}
-          docker push azuresampleproject.azurecr.io/azuremongo:latest
-
-      - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@v1
-        with:
-          appSourcePath: ${{ github.workspace }} 
-          registryUrl: azuresampleproject.azurecr.io
-          registryUsername: ${{ secrets.AZUREMONGO_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.AZUREMONGO_REGISTRY_PASSWORD }}
-          containerAppName: azuremongo
-          resourceGroup: DefaultResourceGroup-EUS
-          imageToBuild: azuresampleproject.azurecr.io/azuremongo:latest
-      
-          
-
-     
-
+          login-server: azuresampleproject.azurecr.io
+          username: azuresampleproject
+          password: K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA
+      - run: |
+          docker build . -t azuresampleproject.azurecr.io/azuresampleresilience:${{ github.sha }}
+          docker push azuresampleproject.azurecr.io/azuresampleresilience:${{ github.sha }}
