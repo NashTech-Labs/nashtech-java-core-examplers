@@ -24,13 +24,21 @@ jobs:
     environment: dev
     steps:
       - uses: actions/checkout@master
-
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
+        with:
+          java-version: '19'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Publish Maven
+        run: mvn clean install
       # Connect to Azure Container registry (ACR)
       - uses: azure/docker-login@v1
         with:
           login-server: azuresampleproject.azurecr.io
           username: azuresampleproject
           password: K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA
+
 
       # Container build and push to a Azure Container registry (ACR)
       - run: |
