@@ -29,7 +29,7 @@
         </repository>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/vimal-knoldus/nashtech-java-core</url>
+            <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
