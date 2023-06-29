@@ -56,7 +56,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
-          client-id: f4cabb60-e1cb-4a29-a210-4644bfbf46e4
+          client-id: f6cffb2a-0043-4df9-8d58-585f02c2692e
           tenant-id: 806d7ff7-6ca2-43a9-b5aa-76ff7a23eb4c
           subscription-id: ff320be2-1922-4fa9-9b6c-7ce1f0febeea
 
@@ -80,7 +80,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
-          client-id: ae0a5e0b-3b4f-4567-ba0f-5ce28c393279
+          client-id: f6cffb2a-0043-4df9-8d58-585f02c2692e
           tenant-id: 806d7ff7-6ca2-43a9-b5aa-76ff7a23eb4c
           subscription-id: ff320be2-1922-4fa9-9b6c-7ce1f0febeea
 
