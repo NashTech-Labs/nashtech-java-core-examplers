@@ -27,13 +27,13 @@
             <id>central</id>
             <url>https://repo1.maven.org/maven2</url>
         </repository>
-<!--        <repository>-->
-<!--            <id>github</id>-->
-<!--            <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core</url>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--        </repository>-->
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
     <!--<distributionManagement>
         <repository>
@@ -133,31 +133,31 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>          -->
-<!--            <groupId>com.google.cloud.tools</groupId>-->
-<!--                <artifactId>jib-maven-plugin</artifactId>-->
-<!--                <version>3.3.1</version>-->
-<!--                <configuration>-->
-<!--                    <from>-->
-<!--                        <image>openjdk:19</image>-->
-<!--                    </from>-->
-<!--                    <to>-->
-<!--                        <image>docker.io/likithntg/nashtech-internal:latest</image>-->
-<!--                    <auth>-->
-<!--                        <username>${env.REGISTRY_USERNAME}</username>-->
-<!--                        <password>${env.REGISTRY_PASSWORD}</password>-->
-<!--                    </auth>-->
-<!--                    </to>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>dockerBuild</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions> -->
-<!--            </plugin>-->
+            <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <from>
+                        <image>openjdk:19</image>
+                    </from>
+                    <to>
+                        <image>azuresampleproject.azurecr.io/nashtech-resilience:latest</image>
+                    <auth>
+                        <username>azuresampleproject</username>
+                        <password>K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA</password>
+                    </auth>
+                    </to>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>dockerBuild</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

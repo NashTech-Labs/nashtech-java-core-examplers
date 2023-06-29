@@ -1,78 +1,138 @@
-# This workflow will build a docker container, publish it to Azure Container Registry, and deploy it to Azure Kubernetes Service.
+# This workflow will build and push an application to a Azure Kubernetes Service (AKS) cluster when you push your code
+#
+# This workflow assumes you have already created the target AKS cluster and have created an Azure Container Registry (ACR)
+# The ACR should be attached to the AKS cluster
+# For instructions see:
+#   - https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal
+#   - https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-portal
+#   - https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli#configure-acr-integration-for-existing-aks-clusters
+#   - https://github.com/Azure/aks-create-action
 #
 # To configure this workflow:
 #
-# 1. Set up the following secrets in your workspace: 
-#     a. REGISTRY_USERNAME with ACR username
-#     b. REGISTRY_PASSWORD with ACR Password
-#     c. AZURE_CREDENTIALS with the output of `az ad sp create-for-rbac --sdk-auth`
+# 1. Set the following secrets in your repository (instructions for getting these can be found at https://docs.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-cli%2Clinux):
+#    - AZURE_CLIENT_ID
+#    - AZURE_TENANT_ID
+#    - AZURE_SUBSCRIPTION_ID
 #
-# 2. Change the values for the REGISTRY_NAME, CLUSTER_NAME, CLUSTER_RESOURCE_GROUP and NAMESPACE environment variables (below).
+# 2. Set the following environment variables (or replace the values below):
+#    - AZURE_CONTAINER_REGISTRY (name of your container registry / ACR)
+#    - RESOURCE_GROUP (where your cluster is deployed)
+#    - CLUSTER_NAME (name of your AKS cluster)
+#    - CONTAINER_NAME (name of the container image you would like to push up to your ACR)
+#    - IMAGE_PULL_SECRET_NAME (name of the ImagePullSecret that will be created to pull your ACR image)
+#    - DEPLOYMENT_MANIFEST_PATH (path to the manifest yaml for your deployment)
+#
+# For more information on GitHub Actions for Azure, refer to https://github.com/Azure/Actions
+# For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
+# For more options with the actions used below please refer to https://github.com/Azure/login
 
-on: [push]
+name: Build and deploy an app to AKS
 
-# Environment variables available to all jobs and steps in this workflow
+on:
+  push:
+    branches: [$default-branch]
+  workflow_dispatch:
+
 env:
-  REGISTRY_NAME: my-registry-name
-  CLUSTER_NAME: my-cluster-name
-  CLUSTER_RESOURCE_GROUP: my-cluster-resource-group
-  NAMESPACE: default
+  AZURE_CONTAINER_REGISTRY: azuresampleproject.azurecr.io
+  CONTAINER_NAME: nashtech-resilience
+  RESOURCE_GROUP: azure-demo
+  CLUSTER_NAME: demo
 
 jobs:
-  build:
+  buildImage:
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
-    environment: dev
     steps:
-      - uses: actions/checkout@master
-      - name: Set up JDK 19
-        uses: actions/setup-java@v3
-        with:
-          java-version: '19'
-          distribution: 'temurin'
-          cache: maven
-      - name: Build with Publish Maven
-        run: mvn clean install
-      # Connect to Azure Container registry (ACR)
-      - uses: azure/docker-login@v1
-        with:
-          login-server: azuresampleproject.azurecr.io
-          username: azuresampleproject
-          password: K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA
+      # Checks out the repository this file is in
+      - uses: actions/checkout@v3
 
-
-      # Container build and push to a Azure Container registry (ACR)
-      - run: |
-          docker build . -t azuresampleproject.azurecr.io/nashtech-reactiv:latest
-          docker push azuresampleproject.azurecr.io/nashtech-reactiv:latest
-
-      # Set the target Azure Kubernetes Service (AKS) cluster.
-      - uses: azure/aks-set-context@v1
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.6
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          cluster-name: demo
+          client-id: f6cffb2a-0043-4df9-8d58-585f02c2692e
+          tenant-id: 806d7ff7-6ca2-43a9-b5aa-76ff7a23eb4c
+          subscription-id: ff320be2-1922-4fa9-9b6c-7ce1f0febeea
+
+      # Builds and pushes an image up to your Azure Container Registry
+      - name: Build and push image to ACR
+        run: |
+          az acr build --image azuresampleproject.azurecr.io/nashtech-resilience:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+
+  deploy:
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: [buildImage]
+    steps:
+      # Checks out the repository this file is in
+      - uses: actions/checkout@v3
+
+      # Logs in with your Azure credentials
+      - name: Azure login
+        uses: azure/login@v1.4.6
+        with:
+          client-id: f6cffb2a-0043-4df9-8d58-585f02c2692e
+          tenant-id: 806d7ff7-6ca2-43a9-b5aa-76ff7a23eb4c
+          subscription-id: ff320be2-1922-4fa9-9b6c-7ce1f0febeea
+
+      # Use kubelogin to configure your kubeconfig for Azure auth
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.25'
+
+      # Retrieves your Azure Kubernetes Service cluster's kubeconfig file
+      - name: Get K8s context
+        uses: azure/aks-set-context@v3
+        with:
           resource-group: azure-demo
+          cluster-name: demo
+          admin: 'false'
+          use-kubelogin: 'true'
 
-      # Create namespace if doesn't exist
-      - run: |
-          kubectl create namespace ${{ env.NAMESPACE }} --dry-run -o json | kubectl apply -f -
-
-      # Create imagepullsecret for Azure Container registry (ACR)
-      - uses: azure/k8s-create-secret@v1
+      # Deploys application based on given manifest file
+      - name: Deploys application
+        uses: Azure/k8s-deploy@v4
         with:
-          container-registry-url: azuresampleproject.azurecr.io
-          container-registry-username: azuresampleproject
-          container-registry-password: K7+B8kOQpL5TQEbiutr44P3p/qFQIOu2CDAl3Kj98e+ACRDO4WOA
-          secret-name: azuresampleproject-registry-connection
-          namespace: ${{ env.NAMESPACE }}
-
-      # Deploy app to AKS
-      - uses: azure/k8s-deploy@v1
-        with:
+          action: deploy
           manifests: |
-            manifests/deployment.yml
-            manifests/service.yml
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: springboot-app
+            spec:
+              replicas: 3
+              selector:
+                matchLabels:
+                  app: springboot-app
+              template:
+                metadata:
+                  labels:
+                    app: springboot-app
+                spec:
+                  containers:
+                    - name: springboot-app
+                      image: azuresampleproject.azurecr.io/nashtech-resilience:latest
+            ---
+            apiVersion: v1
+            kind: Service
+            metadata:
+              name: springboot-app-service
+            spec:
+              type: LoadBalancer
+              selector:
+                app: springboot-app
+              ports:
+                - protocol: TCP
+                  port: 80
+                  targetPort: 8080
+
           images: |
-            azuresampleproject.azurecr.io/nashtech-reactiv:latest
-          imagepullsecrets: |
-            azuresampleproject-registry-connection
-          namespace: ${{ env.NAMESPACE }}
+            azuresampleproject.azurecr.io/nashtech-resilience:${{ github.sha }}
