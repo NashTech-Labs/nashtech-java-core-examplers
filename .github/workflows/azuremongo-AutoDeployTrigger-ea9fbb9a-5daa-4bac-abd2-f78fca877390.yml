@@ -56,9 +56,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
-          client-id: f6cffb2a-0043-4df9-8d58-585f02c2692e
-          tenant-id: 806d7ff7-6ca2-43a9-b5aa-76ff7a23eb4c
-          subscription-id: ff320be2-1922-4fa9-9b6c-7ce1f0febeea
+          creds: ${{ secrets.AZUREMONGO_AZURE_CREDENTIALS }}
 
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
@@ -80,9 +78,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.4.6
         with:
-          client-id: f6cffb2a-0043-4df9-8d58-585f02c2692e
-          tenant-id: 806d7ff7-6ca2-43a9-b5aa-76ff7a23eb4c
-          subscription-id: ff320be2-1922-4fa9-9b6c-7ce1f0febeea
+          creds: ${{ secrets.AZUREMONGO_AZURE_CREDENTIALS }}
 
       # Use kubelogin to configure your kubeconfig for Azure auth
       - name: Set up kubelogin for non-interactive login
