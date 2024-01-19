@@ -14,8 +14,19 @@ public class ObservationServiceImpl implements ObservationService {
     /**
      *  Inject nashtech corelogger.
      */
+    private final CoreLogger log;
+
+    /**
+     * Constructs an ObservationServiceImpl with the provided
+     * CoreLogger for logging.
+     *
+     * @param logParam The CoreLogger instance to be used for
+     *                 logging within this service.
+     */
     @Autowired
-    private CoreLogger log;
+    public ObservationServiceImpl(final CoreLogger logParam) {
+        this.log = logParam;
+    }
 
     /**
      *  Generate a Random instance.

@@ -10,13 +10,31 @@ public class ObservationControllerImpl implements ObservationController {
     /**
      * Inject logging dependency.
      */
-    @Autowired
-    private CoreLogger coreLogger;
+    private final CoreLogger coreLogger;
     /**
      * Inject service dependency.
      */
+    private final ObservationService service;
+
+    /**
+     * Constructs an {@code ObservationControllerImpl} with
+     * the specified parameters.
+     *
+     * @param coreLoggerParam The {@link CoreLogger} instance to
+     *                        be used for logging in the controller.
+     *                        Must not be {@code null}.
+     * @param serviceParam    The {@link ObservationService}
+     *                        instance that provides
+     *                        observation-related
+     *                        functionality. Must not be {@code null}.
+     */
     @Autowired
-    private ObservationService service;
+    public ObservationControllerImpl(final CoreLogger coreLoggerParam,
+                                     final ObservationService serviceParam
+    ) {
+        this.coreLogger = coreLoggerParam;
+        this.service = serviceParam;
+    }
 
     /**
      *  Observation method.

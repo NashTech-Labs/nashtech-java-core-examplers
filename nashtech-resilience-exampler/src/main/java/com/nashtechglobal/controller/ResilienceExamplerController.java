@@ -19,9 +19,26 @@ public class ResilienceExamplerController implements ResilienceExampler {
      * The ResilienceExampleService instance to use for calling the
      * external APIs with resilient behavior.
      */
-    @Autowired
-    private ResilienceExampleService resilienceExampleService;
+    private final ResilienceExampleService resilienceExampleService;
 
+    /**
+     * Constructs a new instance of the ResilienceExamplerController.
+     * This controller is responsible for handling requests related
+     * to resilience examples.
+     *
+     * @param resilienceExampleServiceParam The
+     * {@link ResilienceExampleService} instance that provides
+     *                                      resilience-related
+     *                                      functionalities and
+     *                                      services.
+     *                                      Must not be {@code null}.
+     */
+    @Autowired
+    public ResilienceExamplerController(
+            final ResilienceExampleService resilienceExampleServiceParam
+    ) {
+        this.resilienceExampleService = resilienceExampleServiceParam;
+    }
 
     /**
      * This endpoint retrieves results from the

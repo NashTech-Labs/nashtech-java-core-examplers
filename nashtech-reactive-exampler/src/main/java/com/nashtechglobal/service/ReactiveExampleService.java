@@ -8,7 +8,6 @@ import com.nashtechglobal.reactive.service.ReactiveService;
 import com.nashtechglobal.web.model.ExternalApiRequest;
 import java.util.Map;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,21 +30,39 @@ import reactor.core.publisher.Mono;
  * @see HttpHeaders
  */
 @Service
-@AllArgsConstructor
 public class ReactiveExampleService {
 
     /**
-     * Autowired CoreLogger instance for logging application
+     * CoreLogger instance for logging application
      * events and messages.
      */
-    @Autowired
-    private CoreLogger coreLogger;
+    private final CoreLogger coreLogger;
 
     /**
      * The {@link ReactiveService} instance.
      */
+    private final ReactiveService reactiveService;
+
+    /**
+     * Constructs a new instance of the {@code ReactiveExampleService}
+     * class.
+     *
+     * @param coreLoggerParam     The {@link CoreLogger} instance to
+     *                            be used for logging within this
+     *                            service.
+     *                            Must not be {@code null}.
+     * @param reactiveServiceParam The {@link ReactiveService}
+     *                             instance that provides reactive
+     *                             functionality.
+     *                            Must not be {@code null}.
+     */
     @Autowired
-    private ReactiveService reactiveService;
+    public ReactiveExampleService(final CoreLogger coreLoggerParam,
+                                  final ReactiveService reactiveServiceParam
+    ) {
+        this.coreLogger = coreLoggerParam;
+        this.reactiveService = reactiveServiceParam;
+    }
 
     /**
      * Retrieves a Flux of ReactiveExampleApiResponse objects from an external
