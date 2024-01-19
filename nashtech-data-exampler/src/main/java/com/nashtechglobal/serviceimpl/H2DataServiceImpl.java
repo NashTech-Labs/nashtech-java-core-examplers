@@ -17,8 +17,24 @@ public class H2DataServiceImpl implements H2DataService {
     /**
      *
      */
+    private final H2DBRepository h2DBRepository;
+
+    /**
+     * Constructs a new instance of {@code H2DataServiceImpl}
+     * with the specified {@code H2DBRepository}.
+     * This service is designed to interact with an H2
+     * database using the provided {@code H2DBRepository}.
+     *
+     * @param h2DBRepositoryParam The {@code H2DBRepository}
+     *                            instance to be used for database
+     *                            operations.
+     *                            Must not be {@code null}.
+     */
+
     @Autowired
-    private H2DBRepository h2DBRepository;
+    public H2DataServiceImpl(final H2DBRepository h2DBRepositoryParam) {
+        this.h2DBRepository = h2DBRepositoryParam;
+    }
 
     /**
      * Retrieves the EntityModel object associated with

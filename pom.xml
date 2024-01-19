@@ -35,15 +35,6 @@
             </snapshots>
         </repository>
     </repositories>
-    <!--<distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core-examplers</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </distributionManagement>-->
     <properties>
         <rootDir>${project.basedir}</rootDir>
         <spotbugRootDir>${rootDir}/nashtech-common-exampler</spotbugRootDir>

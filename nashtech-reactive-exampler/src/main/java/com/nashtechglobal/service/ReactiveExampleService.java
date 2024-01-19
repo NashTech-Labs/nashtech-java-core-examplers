@@ -145,12 +145,9 @@ public class ReactiveExampleService {
         ReactiveExampleBody reactiveExampleBody = new ReactiveExampleBody();
         if (examplerRequest != null) {
             reactiveExampleBody.setId(reactiveExampleBody.getId());
-            reactiveExampleBody.setTestingDateData(
-                    reactiveExampleBody.getTestingDateData());
-            reactiveExampleBody.setTestingLongData(
-                    reactiveExampleBody.getTestingLongData());
-            reactiveExampleBody.setTestingStringData(
-                    reactiveExampleBody.getTestingStringData());
+            reactiveExampleBody.setTestingDateData(reactiveExampleBody.getTestingDateData());
+            reactiveExampleBody.setTestingLongData(reactiveExampleBody.getTestingLongData());
+            reactiveExampleBody.setTestingStringData(reactiveExampleBody.getTestingStringData());
 
             examplerRequest.setBody(reactiveExampleBody);
             return ExternalApiRequest.<ReactiveExampleApiRequest>builder()

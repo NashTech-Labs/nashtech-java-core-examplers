@@ -17,9 +17,23 @@ public class MySqlDataServiceImpl implements MySqlDataService {
     /**
      *
      */
+    private final MySqlDBRepository mySqlDBRepository;
 
+    /**
+     * Constructs a new instance of the {@code MySqlDataServiceImpl}
+     * class.
+     *
+     * @param mySqlDBRepositoryParam The {@link MySqlDBRepository}
+     * implementation to be used by this service.
+     * It represents the repository responsible for interacting
+     * with the MySQL database.
+     * Must not be {@code null}.
+     */
     @Autowired
-    private MySqlDBRepository mySqlDBRepository;
+    public MySqlDataServiceImpl(final MySqlDBRepository mySqlDBRepositoryParam
+    ) {
+        this.mySqlDBRepository = mySqlDBRepositoryParam;
+    }
 
     /**
      * Retrieves a list of all EntityModel objects from the MySQL database.

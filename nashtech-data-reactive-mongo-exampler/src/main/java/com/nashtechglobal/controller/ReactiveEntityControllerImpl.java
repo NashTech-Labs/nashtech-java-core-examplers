@@ -3,7 +3,6 @@ package com.nashtechglobal.controller;
 import com.nashtechglobal.model.ReactiveEntityRequest;
 import com.nashtechglobal.model.ReactiveEntityResponse;
 import com.nashtechglobal.service.ReactiveEntityService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +22,32 @@ import reactor.core.publisher.Mono;
  * </p>
  */
 @RestController
-@AllArgsConstructor
 public class ReactiveEntityControllerImpl implements ReactiveEntityController {
     /**
      * Service for performing reactive operations on entity data.
      */
 
+    private final ReactiveEntityService reactiveEntityService;
+
+    /**
+     * Constructs a new instance of the
+     * {@code ReactiveEntityControllerImpl} class.
+     * This controller is designed to handle reactive operations
+     * related to entities
+     * and relies on the provided {@code ReactiveEntityService}
+     * for the underlying business logic.
+     *
+     * @param reactiveEntityServiceParam The {@code ReactiveEntityService}
+     *                                   implementation that this controller
+     *                                   will use to perform reactive operations
+     *                                   on entities. Must not be {@code null}.
+     */
     @Autowired
-    private ReactiveEntityService reactiveEntityService;
+    public ReactiveEntityControllerImpl(
+            final ReactiveEntityService reactiveEntityServiceParam
+    ) {
+        this.reactiveEntityService = reactiveEntityServiceParam;
+    }
 
     /**
      * Saves a ReactiveEntity in the database.

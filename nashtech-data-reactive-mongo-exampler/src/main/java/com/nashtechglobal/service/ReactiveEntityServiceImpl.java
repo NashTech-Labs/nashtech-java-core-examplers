@@ -24,14 +24,35 @@ public class ReactiveEntityServiceImpl implements ReactiveEntityService {
      * Autowired CoreLogger instance for logging application
      * events and messages.
      */
-    @Autowired
-    private CoreLogger coreLogger;
+    private final CoreLogger coreLogger;
 
     /**
      * Autowired field for ReactiveMongoDBRepository instance.
      */
+    private final ReactiveEntityRepository repository;
+
+    /**
+     * Constructs a new instance of the
+     * {@code ReactiveEntityServiceImpl} class.
+     *
+     * @param coreLoggerParam
+     *      The CoreLogger instance to be used for logging
+     *      within the service.
+     *      Should not be {@code null}.
+     *
+     * @param repositoryParam
+     *      The ReactiveEntityRepository instance that
+     *      provides reactive data access
+     *      operations for entities. Should not be {@code null}.
+     */
     @Autowired
-    private ReactiveEntityRepository repository;
+    public ReactiveEntityServiceImpl(
+            final CoreLogger coreLoggerParam,
+            final ReactiveEntityRepository repositoryParam
+    ) {
+        this.coreLogger = coreLoggerParam;
+        this.repository = repositoryParam;
+    }
 
     /**
      * Saves a reactive entity and returns a Mono of the saved entity.

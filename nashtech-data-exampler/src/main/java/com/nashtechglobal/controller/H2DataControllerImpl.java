@@ -16,8 +16,23 @@ public class H2DataControllerImpl implements H2DataController {
     /**
      * The H2DataService object provides methods for accessing the H2 database.
      */
+    private final H2DataService iDataService;
+
+    /**
+     * Constructs a new instance of the H2DataControllerImpl class,
+     * initializing it with the specified H2DataService.
+     *
+     * @param iDataServiceParam The H2DataService implementation to
+     * be used by this controller. It provides the data-related
+     * functionality required by the controller.
+     * Must not be null.
+     *
+     * @throws IllegalArgumentException if the provided iDataService is null.
+     */
     @Autowired
-    private H2DataService iDataService;
+    public H2DataControllerImpl(final H2DataService iDataServiceParam) {
+        this.iDataService = iDataServiceParam;
+    }
 
     /**
      * Retrieves an EntityModel with the given test ID from the H2 database.
