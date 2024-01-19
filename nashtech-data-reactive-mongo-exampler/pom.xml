@@ -38,5 +38,10 @@
         </dependency>
 
     </dependencies>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+        </profile>
+    </profiles>
 
 </project>

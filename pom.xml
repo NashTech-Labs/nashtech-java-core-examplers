@@ -13,14 +13,14 @@
     <name>nashtech-java-core-examplers</name>
     <description>Java Studio SDK</description>
     <modules>
-<!--        <module>nashtech-common-exampler</module>-->
-<!--        <module>nashtech-data-exampler</module>-->
-<!--        <module>nashtech-data-mongo-exampler</module>-->
-<!--        <module>nashtech-data-reactive-mongo-exampler</module>-->
-<!--        <module>nashtech-observability-exampler</module>-->
-<!--        <module>nashtech-reactive-exampler</module>-->
+        <module>nashtech-common-exampler</module>
+        <module>nashtech-data-exampler</module>
+        <module>nashtech-data-mongo-exampler</module>
+        <module>nashtech-data-reactive-mongo-exampler</module>
+        <module>nashtech-observability-exampler</module>
+        <module>nashtech-reactive-exampler</module>
         <module>nashtech-resilience-exampler</module>
-<!--        <module>nashtech-web-exampler</module>-->
+        <module>nashtech-web-exampler</module>
     </modules>
     <repositories>
         <repository>
@@ -144,4 +144,16 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <properties>
+                <!-- Sonar Config -->
+                <sonar.projectKey>${project.artifactId}</sonar.projectKey>
+                <sonar.organization>nashtech-examplers</sonar.organization>
+                <sonarConfig>4d53cbc7ae1fc99c83717d306d99b3f10c66120a</sonarConfig> <!-- NOSONAR -->
+                <sonar.login>${sonarConfig}</sonar.login> <!-- NOSONAR -->
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -17,5 +17,10 @@
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+        </profile>
+    </profiles>
 
 </project>
