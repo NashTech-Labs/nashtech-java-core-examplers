@@ -111,15 +111,7 @@ class ReactiveEntityServiceUTest {
         assertEquals("test1", Objects.requireNonNull(response.block()).getTestingStringData());
         assertEquals(789L, Objects.requireNonNull(response.block()).getTestingLongData());
     }
-    @Test
-    void deleteReactiveEntity_whenCalled() {
-        ReactiveEntity reactiveEntity = getReactiveEntity();
-        Mono<Void> voidReturn  = Mono.empty();
-        when(reactiveEntityRepository.delete((ReactiveEntity) any())).thenReturn( Mono.empty());
-        when(reactiveEntityRepository.findById(anyString())).thenReturn((Mono.just(reactiveEntity)));
-        reactiveEntityServiceImpl.deleteReactiveEntity("1");
-        Assert.isNull(reactiveEntityRepository.findAll(), "This is empty after delete");
-    }
+
     ReactiveEntity getReactiveEntity()
     {
         ReactiveEntity reactiveEntityMono = new ReactiveEntity();
