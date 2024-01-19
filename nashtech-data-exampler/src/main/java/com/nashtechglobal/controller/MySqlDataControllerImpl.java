@@ -17,9 +17,21 @@ public class MySqlDataControllerImpl implements MySqlDataController {
     /**
      *The H2DataController implements methods for accessing the MySql database.
      */
+    private final MySqlDataService mySqlDataService;
 
+    /**
+     * Constructs a new instance of {@code MySqlDataControllerImpl}
+     * with the specified
+     * {@code MySqlDataService}.
+     *
+     * @param mySqlDataServiceParam The {@code MySqlDataService}
+     * implementation to be used for handling MySQL data operations.
+     */
     @Autowired
-    private MySqlDataService mySqlDataService;
+    public MySqlDataControllerImpl(final MySqlDataService mySqlDataServiceParam
+    ) {
+        this.mySqlDataService = mySqlDataServiceParam;
+    }
 
     /**
      * Retrieves all EntityModels from the MySQL database.

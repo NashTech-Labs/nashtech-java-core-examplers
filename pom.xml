@@ -13,14 +13,14 @@
     <name>nashtech-java-core-examplers</name>
     <description>Java Studio SDK</description>
     <modules>
-<!--        <module>nashtech-common-exampler</module>-->
-<!--        <module>nashtech-data-exampler</module>-->
-<!--        <module>nashtech-data-mongo-exampler</module>-->
-<!--        <module>nashtech-data-reactive-mongo-exampler</module>-->
-<!--        <module>nashtech-observability-exampler</module>-->
-<!--        <module>nashtech-reactive-exampler</module>-->
+        <module>nashtech-common-exampler</module>
+        <module>nashtech-data-exampler</module>
+        <module>nashtech-data-mongo-exampler</module>
+        <module>nashtech-data-reactive-mongo-exampler</module>
+        <module>nashtech-observability-exampler</module>
+        <module>nashtech-reactive-exampler</module>
         <module>nashtech-resilience-exampler</module>
-<!--        <module>nashtech-web-exampler</module>-->
+        <module>nashtech-web-exampler</module>
     </modules>
     <repositories>
         <repository>
@@ -35,15 +35,6 @@
             </snapshots>
         </repository>
     </repositories>
-    <!--<distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/dev-swapnildixit4161/nashtech-java-core-examplers</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </distributionManagement>-->
     <properties>
         <rootDir>${project.basedir}</rootDir>
         <spotbugRootDir>${rootDir}/nashtech-common-exampler</spotbugRootDir>

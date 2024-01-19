@@ -16,14 +16,31 @@ import java.util.stream.Collectors;
 @Service
 public final class  DataServiceImpl implements DataService {
     /**
-     * Autowired instance of the MongodbRepository used
+     * MongodbRepository used
      * to interact with a MongoDB database.
      * This repository provides methods for CRUD
      * (Create, Read, Update, Delete) operations
      * on the EntityModel documents stored in the database.
      */
+
+    private final MongodbRepository mongodbRepository;
+
+    /**
+     * Constructs a new instance of {@code DataServiceImpl}
+     * with the provided {@code MongodbRepository}.
+     *
+     * @param mongodbRepositoryParam The MongoDB repository
+     *                               to be injected into the
+     *                               service.
+     *                               This repository is used
+     *                               for interacting with the
+     *                               MongoDB data store.
+     *                               It should not be {@code null}.
+     */
     @Autowired
-    private MongodbRepository mongodbRepository;
+    public DataServiceImpl(final MongodbRepository mongodbRepositoryParam) {
+        this.mongodbRepository = mongodbRepositoryParam;
+    }
 
     @Override
     public List<EntityResponse> getAllEntityModels() {

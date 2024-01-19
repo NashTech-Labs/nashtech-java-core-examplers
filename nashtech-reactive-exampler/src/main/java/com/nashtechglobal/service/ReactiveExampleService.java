@@ -8,7 +8,6 @@ import com.nashtechglobal.reactive.service.ReactiveService;
 import com.nashtechglobal.web.model.ExternalApiRequest;
 import java.util.Map;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -31,21 +30,40 @@ import reactor.core.publisher.Mono;
  * @see HttpHeaders
  */
 @Service
-@AllArgsConstructor
 public class ReactiveExampleService {
 
     /**
      * Autowired CoreLogger instance for logging application
      * events and messages.
      */
-    @Autowired
-    private CoreLogger coreLogger;
+    private final CoreLogger coreLogger;
 
     /**
      * The {@link ReactiveService} instance.
      */
+    private final ReactiveService reactiveService;
+
+    /**
+     * Constructs a new instance of the
+     * {@code ReactiveExampleService} class.
+     *
+     * @param coreLoggerParam
+     *         The {@link CoreLogger} instance used for
+     *         logging within the core application.
+     *         Should not be {@code null}.
+     *
+     * @param reactiveServiceParam
+     *         The {@link ReactiveService} instance
+     *         providing reactive functionality.
+     *         Should not be {@code null}.
+     */
     @Autowired
-    private ReactiveService reactiveService;
+    public ReactiveExampleService(
+            final CoreLogger coreLoggerParam,
+            final ReactiveService reactiveServiceParam) {
+        this.coreLogger = coreLoggerParam;
+        this.reactiveService = reactiveServiceParam;
+    }
 
     /**
      * Retrieves a Flux of ReactiveExampleApiResponse objects from an external
@@ -145,9 +163,12 @@ public class ReactiveExampleService {
         ReactiveExampleBody reactiveExampleBody = new ReactiveExampleBody();
         if (examplerRequest != null) {
             reactiveExampleBody.setId(reactiveExampleBody.getId());
-            reactiveExampleBody.setTestingDateData(reactiveExampleBody.getTestingDateData());
-            reactiveExampleBody.setTestingLongData(reactiveExampleBody.getTestingLongData());
-            reactiveExampleBody.setTestingStringData(reactiveExampleBody.getTestingStringData());
+            reactiveExampleBody.setTestingDateData(reactiveExampleBody
+                    .getTestingDateData());
+            reactiveExampleBody.setTestingLongData(reactiveExampleBody
+                    .getTestingLongData());
+            reactiveExampleBody.setTestingStringData(reactiveExampleBody
+                    .getTestingStringData());
 
             examplerRequest.setBody(reactiveExampleBody);
             return ExternalApiRequest.<ReactiveExampleApiRequest>builder()

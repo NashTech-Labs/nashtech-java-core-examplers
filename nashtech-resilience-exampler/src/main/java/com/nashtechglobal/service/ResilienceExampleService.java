@@ -26,9 +26,29 @@ public class ResilienceExampleService {
      * An instance of the ResilienceService to call external
      * APIs with Resilience4j modules.
      */
-    @Autowired
-    private ResilienceService resilienceService;
 
+    private final ResilienceService resilienceService;
+
+    /**
+     * Constructs a new instance of the ResilienceExampleService,
+     * injecting the provided ResilienceService.
+     * This constructor is annotated with {@literal @}Autowired
+     * to indicate automatic dependency injection.
+     *
+     * @param resilienceServicePram The ResilienceService
+     *                              to be injected into the
+     *                              ResilienceExampleService.
+     *                               This service is responsible for
+     *                               handling resilience-related
+     *                               functionalities.
+     *                               Must not be {@code null}.
+     */
+    @Autowired
+    public ResilienceExampleService(final ResilienceService
+                                                resilienceServicePram
+    ) {
+        this.resilienceService = resilienceServicePram;
+    }
 
     /**
      * Calls an external API using RateLimiter module and

@@ -26,8 +26,21 @@ public class ReactiveExamplerController implements ReactiveExampler {
     /**
      * The {@link ReactiveExampleService} instance.
      */
+
+    private final ReactiveExampleService exampleService;
+
+    /**
+     * Constructs a new {@code ReactiveExamplerController}
+     * with the given {@code ReactiveExampleService}.
+     *
+     * @param exampleServiceParam The ReactiveExampleService
+     *                            to be injected into the controller.
+     */
     @Autowired
-    private ReactiveExampleService exampleService;
+    public ReactiveExamplerController(
+            final ReactiveExampleService exampleServiceParam) {
+        this.exampleService = exampleServiceParam;
+    }
 
     /**
      * Handles an HTTP Request to retrieve a {@link Mono}

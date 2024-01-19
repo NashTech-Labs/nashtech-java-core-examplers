@@ -16,16 +16,26 @@ import java.util.List;
 public class MongoDataControllerImpl implements MongoDataController {
 
     /**
-     * Autowired instance of the DataService used to
+     * DataService used to
      * perform business logic operations on
      * EntityModel objects. This service contains methods
      * for retrieving, creating, updating,
      * and deleting EntityModel objects from the MongoDB
      * database through the MongodbRepository.
      */
+    private final DataService dataService;
 
+    /**
+     * Constructs a new instance of MongoDBDataControllerImpl
+     * with the specified DataService.
+     *
+     * @param dataServiceParam The DataService implementation
+     *                          to be used for data operations.
+     */
     @Autowired
-    private DataService dataService;
+    public MongoDataControllerImpl(final DataService dataServiceParam) {
+        this.dataService = dataServiceParam;
+    }
 
     /**
      * Retrieves all EntityModel objects stored in the MongoDB database.
